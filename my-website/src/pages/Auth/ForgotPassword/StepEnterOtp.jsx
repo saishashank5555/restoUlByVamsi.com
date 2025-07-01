@@ -1,69 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import StepBox from "./StepBox";
-import OTPInput from "./OTPinput";
 
-const StepEnterOtp = ({
-  email,
-  enteredOtp,
-  setEnteredOtp,
-  onNext,
-  error,
-  setError,
-  timer,
-  setTimer,
-  canResend,
-  setCanResend,
-  resendOtp,
-  goBack,
-}) => {
+const StepEnterOTP = ({ email, otp, setOtp, onVerify, onResend, onBack, error }) => {
+  const [timer, setTimer] = useState(30);
+
   useEffect(() => {
-    let interval;
-    if (timer > 0) {
-      interval = setInterval(() => setTimer(t => t - 1), 1000);
-    } else {
-      setCanResend(true);
-    }
-    return () => clearInterval(interval);
-  }, [timer, setTimer, setCanResend]);
+    const countdown = setInterval(() => {
+      setTimer(prev => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, []);
+
+  const resendDisabled = timer > 0;
+
+  const backgroundOpacity = 1 - timer / 30;
 
   return (
     <StepBox>
-      {/* Back Arrow */}
       <button
-        type="button"
-        onClick={goBack}
+        onClick={onBack}
         style={{
           position: "absolute",
-          left: 16,
           top: 16,
-          background: "none",
-          border: "none",
-          fontSize: "1.5rem",
+          left: 16,
+          padding: "0.4rem 0.9rem",
+          fontSize: "0.95rem",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+          background: "#f2f2f2",
           cursor: "pointer",
-          color: "#0071e3",
         }}
-        aria-label="Back"
       >
-        ←
+        Back
       </button>
-      <div style={{ marginBottom: 18, textAlign: "center" }}>
-        <div style={{ marginTop: 10, color: "#444", fontSize: "1.08rem" }}>
-          We have sent an OTP to your email: <b>{email}</b>
-        </div>
+
+      <div style={{ fontWeight: 600, fontSize: "1.1rem", marginBottom: 6 }}>
+        Verify OTP
+      </div>
+      <div style={{ fontSize: "0.96rem", color: "#444", marginBottom: 12 }}>
+        OTP sent to: <strong>{email}</strong>
       </div>
       <form
         onSubmit={e => {
           e.preventDefault();
-          setError("");
-          onNext();
+          if (otp.length !== 6) return;
+          onVerify();
         }}
       >
-        <OTPInput value={enteredOtp} onChange={setEnteredOtp} />
-        {error && (
-          <div style={{ color: "red", marginBottom: 12, textAlign: "center" }}>
-            {error}
-          </div>
-        )}
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={6}
+          placeholder="Enter 6-digit OTP"
+          value={otp}
+          onChange={e => setOtp(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "0.85rem",
+            border: "1.5px solid #bdbdbd",
+            borderRadius: "8px",
+            fontSize: "1.1rem",
+            marginBottom: "1rem",
+            letterSpacing: "0.2em",
+            background: "#f7faff",
+          }}
+        />
+        {error && <div style={{ color: "red", marginBottom: 12 }}>{error}</div>}
         <button
           type="submit"
           style={{
@@ -76,45 +78,33 @@ const StepEnterOtp = ({
             fontWeight: "bold",
             fontSize: "1.08rem",
             cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            marginBottom: "1rem",
           }}
         >
-          Verify OTP
+          Verify
         </button>
       </form>
-      <div style={{ marginTop: 18, textAlign: "center" }}>
-        <span
-          style={{
-            color: "#0071e3",
-            cursor: "pointer",
-            fontSize: "0.98rem",
-            marginRight: 16,
-          }}
-          onClick={goBack}
-        >
-          Change email
-        </span>
-        <span style={{ color: "#888", fontSize: "0.98rem" }}>
-          {canResend ? (
-            <span
-              style={{ color: "#0071e3", cursor: "pointer", marginLeft: 8 }}
-              onClick={() => {
-                resendOtp();
-                setTimer(30);
-                setCanResend(false);
-                setEnteredOtp("");
-                setError("");
-              }}
-            >
-              Resend OTP
-            </span>
-          ) : (
-            <>Resend OTP in {timer}s</>
-          )}
-        </span>
-      </div>
+
+      <button
+        onClick={onResend}
+        disabled={resendDisabled}
+        style={{
+          width: "100%",
+          padding: "0.65rem",
+          background: `rgba(0, 113, 227, ${backgroundOpacity})`,
+          color: "#fff",
+          border: "none",
+          borderRadius: "6px",
+          fontSize: "0.95rem",
+          fontWeight: 500,
+          cursor: resendDisabled ? "not-allowed" : "pointer",
+          transition: "background 0.3s ease",
+        }}
+      >
+        {resendDisabled ? `Resend in ${timer}s` : "Resend OTP"}
+      </button>
     </StepBox>
   );
 };
 
-export default StepEnterOtp;
+export default StepEnterOTP;

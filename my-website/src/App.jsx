@@ -1,6 +1,6 @@
 // === src/App.jsx ===
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavbarLinks from './components/Navbar/NavLinks.jsx';
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -32,28 +32,36 @@ import Security from './pages/Footor/security.jsx';
 import AndroidApp from './pages/Footor/AndroidApp.jsx';
 import IOSApp from './pages/Footor/IOSApp.jsx';
 
-import SignUpForm from './pages/Footor/ListYourProperty/SignUpForm.jsx';
-import SignInForm from './pages/Footor/ListYourProperty/SignInForm.jsx';
+// import SignUpForm from './pages/Footor/ListYourProperty/SignUpForm.jsx';
+import SignInForm from "./pages/Footor/ListYourProperty/SignInForm.jsx";
 
 // import SignUp from './pages/User/SignUp.jsx';
 
 import ListYourProperty from "./pages/Footor/ListYourProperty/ListYourProperty";
-// import SuccessPage from './pages/Footor/ListYourProperty/signupsteps/SuccessPage.jsx';
-
-// import Step1BasicInfo from './pages/Footor/ListYourProperty/signupsteps/Step1BasicInfo.jsx';
-// import Step2UploadImages from './pages/Footor/ListYourProperty/signupsteps/Step2UploadImages.jsx';
-// import Step3PropertyDetails from './pages/Footor/ListYourProperty/signupsteps/Step3PropertyDetails.jsx';
-// import SuccessPage from './pages/Footor/ListYourProperty/signupsteps/SuccessPage.jsx';
+import MultiStepForm from "./pages/Footor/ListYourProperty/SignUpSteps/MultiStepForm.jsx";
+import Success from "./pages/Footor/ListYourProperty/SignUpSteps/Success.jsx";
 import ForgotPassword from './pages/Auth/ForgotPassword/ForgotPassword.jsx';
 import UserSignIn from './pages/User/Signin.jsx';
-import Success from './pages/Footor/ListYourProperty/Success.jsx';
+import SignUp from "./pages/User/SignUp.jsx";
+import SignUpSuccess from "./pages/User/SignUpSuccess.jsx";
 
-function App() {
+// Owner workspace imports
+import DashboardLayout from "./pages/ownerWorkspace/DashboardLayout";
+import DashboardHome from "./pages/ownerWorkspace/DashboardHome";
+import AddProperty from "./pages/ownerWorkspace/AddProperty";
+import MyProperties from "./pages/ownerWorkspace/MyProperties";
+import Bookings from "./pages/ownerWorkspace/Bookings";
+import Earnings from "./pages/ownerWorkspace/Earnings";
+import Settings from "./pages/ownerWorkspace/Settings";
+
+function AppContent() {
+  const location = useLocation();
+  const isOwnerRoute = location.pathname.startsWith("/owner");
+
   return (
-    <Router>
-      <ScrollToTop />
-      <NavbarLinks />
-      <div style={{ paddingTop: '80px' }}>
+    <>
+      {!isOwnerRoute && <NavbarLinks />}
+      <div style={{ paddingTop: !isOwnerRoute ? '80px' : 0 }}>
         <Routes>
           {/* Main routes */}
           <Route path="/" element={<Home />} />
@@ -87,17 +95,37 @@ function App() {
 
           {/* List Your Property routes */}
           <Route path="/list-your-property" element={<ListYourProperty />} />
+          <Route path="/list-your-property/signup" element={<MultiStepForm />} />
           <Route path="/list-your-property/signin" element={<SignInForm />} />
-          <Route path="/list-your-property/signup" element={<SignUpForm />} />
-          <Route path="/list-your-property/success" element={<Success />} /> 
-          {/* <Route path="/list-your-property/signupsteps/step1" element={<Step1BasicInfo />} />
-          <Route path="/list-your-property/signupsteps/step2" element={<Step2UploadImages />} />
-          <Route path="/list-your-property/signupsteps/step3" element={<Step3PropertyDetails />} /> */}
+          <Route path="/list-your-property/signup-success" element={<Success />} /> 
           <Route path="/forgot-password/*" element={<ForgotPassword />} />
-          {/* <Route path="/signup" element={<SignUp />} /> */}
           <Route path="/signin" element={<UserSignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup-success" element={<SignUpSuccess />} />
+
+          {/* Owner routes */}
+          <Route path="/owner/login" element={<SignInForm />} />
+
+          <Route path="/owner" element={<DashboardLayout />}>
+            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="add-property" element={<AddProperty />} />
+            <Route path="my-properties" element={<MyProperties />} />
+            <Route path="bookings" element={<Bookings />} />
+            <Route path="earnings" element={<Earnings />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="contact-us" element={<ContactUs />} />
+          </Route>
         </Routes>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <AppContent />
     </Router>
   );
 }

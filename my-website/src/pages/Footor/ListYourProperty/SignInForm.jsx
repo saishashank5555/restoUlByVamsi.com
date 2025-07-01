@@ -33,8 +33,9 @@ const SignInForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    alert("Logged in successfully (mock login)");
-    // Add actual login logic here
+    // Mock login logic
+    // On successful login, navigate to owner dashboard
+    navigate("/owner/dashboard");
   };
 
   return (

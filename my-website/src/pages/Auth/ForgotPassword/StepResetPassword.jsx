@@ -12,23 +12,21 @@ const StepResetPassword = ({
   onBack,
 }) => (
   <StepBox>
-    {/* Back Arrow */}
     <button
-      type="button"
       onClick={onBack}
       style={{
         position: "absolute",
-        left: 16,
         top: 16,
-        background: "none",
-        border: "none",
-        fontSize: "1.5rem",
+        left: 16,
+        padding: "0.4rem 0.9rem",
+        fontSize: "0.95rem",
+        borderRadius: "6px",
+        border: "1px solid #ccc",
+        background: "#f2f2f2",
         cursor: "pointer",
-        color: "#0071e3",
       }}
-      aria-label="Back"
     >
-      ←
+      Back
     </button>
     <div style={{ fontWeight: 600, fontSize: "1.1rem", marginBottom: 18, textAlign: "center" }}>
       Set your new password

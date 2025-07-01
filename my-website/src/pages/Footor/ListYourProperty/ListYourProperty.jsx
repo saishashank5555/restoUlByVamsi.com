@@ -19,7 +19,7 @@ const ListYourProperty = () => {
             </button>
             <button
               style={styles.btnOutline}
-              onClick={() => navigate("/list-your-property/signup")}
+              onClick={() => navigate("/list-your-property")}
             >
               Sign Up
             </button>
