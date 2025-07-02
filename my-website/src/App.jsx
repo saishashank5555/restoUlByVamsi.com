@@ -54,6 +54,12 @@ import Bookings from "./pages/ownerWorkspace/Bookings";
 import Earnings from "./pages/ownerWorkspace/Earnings";
 import Settings from "./pages/ownerWorkspace/Settings";
 
+// Owner-specific imports
+import OwnerLayout from "./components/owner/OwnerLayout";
+// import BookingsPage from "./pages/BookingsPage"
+import contactUs from './pages/Footor/contactus.jsx';
+import AddPropertyRoutes from "./routes/AddPropertyRoutes";
+
 function AppContent() {
   const location = useLocation();
   const isOwnerRoute = location.pathname.startsWith("/owner");
@@ -115,6 +121,27 @@ function AppContent() {
             <Route path="settings" element={<Settings />} />
             <Route path="contact-us" element={<ContactUs />} />
           </Route>
+
+          {/* New Owner-specific routes */}
+          <Route
+            path="/owner/bookings"
+            element={
+              <OwnerLayout>
+                <Bookings />
+              </OwnerLayout>
+            }
+          />
+
+          <Route
+            path="/owner/contact-us"
+            element={
+              <OwnerLayout>
+                <ContactUs />
+              </OwnerLayout>
+            }
+          />
+
+          <Route path="/owner/add-property/*" element={<AddPropertyRoutes />} />
         </Routes>
       </div>
     </>
