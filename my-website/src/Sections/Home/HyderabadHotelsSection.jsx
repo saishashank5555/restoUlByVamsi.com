@@ -4,7 +4,7 @@ import './homeSection.css';
 const hyderabadHotels = [
   {
     name: "Taj Falaknuma Palace",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80",
+    image: "http://res.cloudinary.com/drabmyepc/image/upload/v1751115738/kctzqpos0g7nizkpaa3v.jpg",
     rating: 5,
     reviews: 524,
     location: "Falaknuma, Hyderabad",
@@ -12,7 +12,7 @@ const hyderabadHotels = [
   },
   {
     name: "ITC Kohenur",
-    image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=600&q=80",
+    image: "http://res.cloudinary.com/drabmyepc/image/upload/v1751115738/kctzqpos0g7nizkpaa3v.jpg",
     rating: 5,
     reviews: 437,
     location: "HITEC City, Hyderabad",

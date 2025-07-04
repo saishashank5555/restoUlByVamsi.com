@@ -21,10 +21,44 @@ const UserSignIn = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Logging in with:", useEmail ? formData.email : formData.phone, formData.password);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  const url = useEmail
+    ? "http://localhost:8081/users/loginwithEmailPassword"
+    : "http://localhost:8081/users/loginwithPhonePassword";
+
+  const payload = useEmail
+    ? { emailOrPhone: formData.email, password: formData.password }
+    : { phone: formData.phone, password: formData.password };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Login failed");
+    }
+
+    const user = await response.json();
+    
+    // Save userId to sessionStorage
+    sessionStorage.setItem("userId", user.customerId); // Assuming your backend returns `customerId`
+
+    alert("Login successful!");
+    navigate("/dashboard"); // or wherever you want to redirect
+
+  } catch (error) {
+    alert(`Login failed: ${error.message}`);
+  }
+};
+
 
   return (
     <div style={styles.wrapper}>

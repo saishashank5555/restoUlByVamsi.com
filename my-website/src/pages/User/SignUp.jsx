@@ -21,17 +21,63 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (form.password !== form.confirmPassword) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   // Simulate registration
+  //   console.log("Registration Data:", form);
+  //   navigate("/signup-success");
+  // };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  const payload = {
+    fullName: form.fullName,
+    email: form.email,
+    phone: form.phone,
+    password: form.password,
+  };
+
+  try {
+    const response = await fetch("http://localhost:8081/users/registerUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      let errorMsg = "Failed to register";
+      try {
+        const errorData = await response.json();
+        errorMsg = errorData.message || errorMsg;
+      } catch {}
+      throw new Error(errorMsg);
     }
 
-    // Simulate registration
-    console.log("Registration Data:", form);
+    const data = await response.json();
+
+    // Store user data in sessionStorage
+    sessionStorage.setItem("user", JSON.stringify(data));
+
+    // Navigate to success page
     navigate("/signup-success");
-  };
+  } catch (error) {
+    alert(`Registration failed: ${error.message}`);
+    console.error("Registration error:", error);
+  }
+};
+
 
   return (
     <div style={styles.container}>
