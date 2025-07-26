@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from "react";
+import BookButton from "../../components/BookButton";
+import BookingModal from "../../components/BookingModal";
 import './homeSection.css'; // Using same styles as HyderabadHotelsSection
 
 const mostBookedHotels = [
@@ -47,6 +49,9 @@ const StarRating = ({ rating }) => {
 };
 
 const MostBookedHotels = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+
   return (
     <section className="popular-destinations-section">
       <h2 className="destination-heading">Most Booked Hotels</h2>
@@ -72,11 +77,16 @@ const MostBookedHotels = () => {
                   ₹{hotel.price.toLocaleString()} / stay
                 </span>
               </div>
-              <button className="book-button">Book Now</button>
+              <BookButton onClick={() => { setSelectedProperty(hotel); setModalOpen(true); }} />
             </div>
           </div>
         ))}
       </div>
+      <BookingModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        property={selectedProperty}
+      />
     </section>
   );
 };

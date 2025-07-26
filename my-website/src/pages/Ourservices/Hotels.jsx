@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import BookButton from "../../components/BookButton";
+import BookingModal from "../../components/BookingModal";
 import Footer from "../../Sections/Home/Footer.jsx"; // Adjust the import path as necessary
 
 const Hotels = () => {
@@ -8,6 +10,8 @@ const Hotels = () => {
     family: false,
     business: false,
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const hotelsData = {
     luxury: Array.from({ length: 12 }, (_, i) => ({
@@ -84,7 +88,7 @@ const Hotels = () => {
               <p style={styles.location}>{hotel.location}</p>
               <p style={styles.price}>₹{hotel.price} / stay</p>
               {renderStars(hotel.rating)}
-              <button style={styles.bookNow} className="book-btn">Book Now</button>
+              <BookButton hotel={hotel} onClick={() => { setSelectedProperty(hotel); setModalOpen(true); }} />
             </div>
           ))}
         </div>
@@ -135,6 +139,11 @@ const Hotels = () => {
         {renderCategory('family', 'Family-Friendly Hotels')}
         {renderCategory('business', 'Business Hotels')}
       </div>
+      <BookingModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        property={selectedProperty}
+      />
       <Footer />
     </>
   );
@@ -187,16 +196,6 @@ const styles = {
     fontWeight: 'bold',
     margin: '8px 0',
     color: '#2c3e50',
-  },
-  bookNow: {
-    marginTop: '10px',
-    padding: '8px 16px',
-    backgroundColor: '#007bff',
-    border: 'none',
-    color: '#fff',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    alignSelf: 'flex-start',
   },
   toggleButton: {
     padding: '10px 20px',

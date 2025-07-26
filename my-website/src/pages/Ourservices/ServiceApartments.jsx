@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import BookButton from "../../components/BookButton";
+import BookingModal from "../../components/BookingModal";
 import Footer from "../../Sections/Home/Footer.jsx";
 
 const ServiceApartments = () => {
@@ -8,6 +10,8 @@ const ServiceApartments = () => {
     budget: false,
     premium: false,
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const sections = [
     {
@@ -118,9 +122,13 @@ const ServiceApartments = () => {
                         </span>
                       ))}
                     </div>
-                    <button style={styles.bookNow} className="book-btn">
-                      Book Now
-                    </button>
+                    <BookButton
+                      apartment={apt}
+                      onClick={() => {
+                        setSelectedProperty(apt);
+                        setModalOpen(true);
+                      }}
+                    />
                   </div>
                 ))}
               </div>
@@ -141,6 +149,11 @@ const ServiceApartments = () => {
         })}
         <Footer />
       </div>
+      <BookingModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        property={selectedProperty}
+      />
     </>
   );
 };
@@ -201,16 +214,6 @@ const styles = {
   stars: {
     fontSize: "1rem",
     marginBottom: "10px",
-  },
-  bookNow: {
-    marginTop: "auto",
-    padding: "8px 16px",
-    backgroundColor: "#007bff",
-    border: "none",
-    color: "#fff",
-    borderRadius: "4px",
-    cursor: "pointer",
-    alignSelf: "flex-start",
   },
   toggleButton: {
     padding: "10px 20px",

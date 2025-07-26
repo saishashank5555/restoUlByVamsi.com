@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import BookButton from "../../components/BookButton";
+import BookingModal from "../../components/BookingModal";
 import Footer from "../../Sections/Home/Footer.jsx";
 
 const GuestHouses = () => {
@@ -8,6 +10,8 @@ const GuestHouses = () => {
     luxury: false,
     hill: false,
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const sections = [
     {
@@ -117,9 +121,13 @@ const GuestHouses = () => {
                         </span>
                       ))}
                     </div>
-                    <button style={styles.bookNow} className="book-btn">
-                      Book Now
-                    </button>
+                    <BookButton
+                      house={house}
+                      onClick={() => {
+                        setSelectedProperty(house);
+                        setModalOpen(true);
+                      }}
+                    />
                   </div>
                 ))}
               </div>
@@ -139,6 +147,11 @@ const GuestHouses = () => {
           );
         })}
 
+        <BookingModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          property={selectedProperty}
+        />
         <Footer />
       </div>
     </>

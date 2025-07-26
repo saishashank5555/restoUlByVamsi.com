@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import BookButton from "../../components/BookButton";
+import BookingModal from "../../components/BookingModal";
 import Footer from "../../Sections/Home/Footer.jsx";
 
 const BanquetHalls = () => {
@@ -8,6 +10,8 @@ const BanquetHalls = () => {
     birthday: false,
     luxury: false,
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const sections = [
     {
@@ -117,9 +121,7 @@ const BanquetHalls = () => {
                         </span>
                       ))}
                     </div>
-                    <button style={styles.bookNow} className="book-btn">
-                      Book Now
-                    </button>
+                    <BookButton hall={hall} onClick={() => { setSelectedProperty(hall); setModalOpen(true); }} />
                   </div>
                 ))}
               </div>
@@ -139,6 +141,11 @@ const BanquetHalls = () => {
           );
         })}
 
+        <BookingModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          property={selectedProperty}
+        />
         <Footer />
       </div>
     </>
@@ -201,16 +208,6 @@ const styles = {
   stars: {
     fontSize: "1rem",
     marginBottom: "10px",
-  },
-  bookNow: {
-    marginTop: "auto",
-    padding: "8px 16px",
-    backgroundColor: "#007bff",
-    border: "none",
-    color: "#fff",
-    borderRadius: "4px",
-    cursor: "pointer",
-    alignSelf: "flex-start",
   },
   toggleButton: {
     padding: "10px 20px",
