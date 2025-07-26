@@ -22,27 +22,86 @@ const AddProperty = () => {
     }
   };
 
-  return (
-    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 md:p-10 mt-6">
-      <h2 className="text-3xl font-bold text-blue-700 mb-4 text-center">
-        Add a New Place
-      </h2>
+  // Internal styles object
+  const styles = {
+    container: {
+      maxWidth: "55rem", // roughly max-w-4xl = 1024px but prettier scaled a little
+      margin: "1.5rem auto",
+      padding: "2.5rem",
+      backgroundColor: "#ffffff", // white
+      borderRadius: "1.25rem",
+      boxShadow: "0 4px 24px rgba(44, 62, 80, 0.1)",
+      color: "#1b263b",
+      fontFamily:
+        "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    },
+    title: {
+      fontSize: "2.25rem", // text-3xl
+      fontWeight: "700",
+      color: "#1565d8", // blue-700
+      marginBottom: "1rem",
+      textAlign: "center",
+    },
+    subtitle: {
+      textAlign: "center",
+      color: "#4b5563", // gray-600
+      fontStyle: "italic",
+      marginBottom: "1.5rem",
+      fontSize: "1rem",
+    },
+    label: {
+      display: "block",
+      fontSize: "1.125rem", // text-lg
+      fontWeight: "600",
+      color: "#374151", // gray-700
+      marginBottom: "0.5rem",
+      textAlign: "center",
+    },
+    select: {
+      width: "100%",
+      maxWidth: "10rem", // max-w-sm
+      display: "block",
+      marginLeft: "auto",
+      marginRight: "auto",
+      padding: "0.5rem 1rem",
+      fontSize: "0.8rem",
+      fontWeight: "500",
+      color: "#1b263b",
+      backgroundColor: "white",
+      border: "1.5px solid #d1d5db", // gray-300
+      borderRadius: "0.5rem",
+      textAlignLast: "center",
+      cursor: "pointer",
+      transition: "box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out",
+    },
+    selectFocus: {
+      outline: "none",
+      borderColor: "#1565d8",
+      boxShadow: "0 0 4px 2px rgba(21,101,216,0.4)",
+    },
+  };
 
-      <p className="text-center text-gray-600 mb-6 italic">
+  // Optional: you can handle focus styles with state or skip for now
+
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.title}>Add a New Place</h2>
+
+      <p style={styles.subtitle}>
         “Make your space someone’s next stay. Add your place today.”
       </p>
 
-      {/* Dropdown Selector */}
-      <div className="mb-6">
-        <label className="block text-lg font-medium text-gray-700 mb-2 text-center">
+      <div style={{ marginBottom: "1.5rem" }}>
+        <label htmlFor="propertyTypeSelect" style={styles.label}>
           Select your type of place
         </label>
         <select
+          id="propertyTypeSelect"
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
-          className="w-full max-w-sm mx-auto block border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 text-center"
+          style={styles.select}
         >
-          <option value="">-- Choose an option --</option>
+          <option value="">- Choose option -</option>
           <option value="Hotel">Hotel</option>
           <option value="Guest House">Guest House</option>
           <option value="Service Apartment">Service Apartment</option>
