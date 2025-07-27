@@ -59,7 +59,7 @@ import OwnerLayout from "./components/owner/OwnerLayout";
 // import BookingsPage from "./pages/BookingsPage"
 import contactUs from './pages/Footor/contactus.jsx';
 import AddPropertyRoutes from "./routes/AddPropertyRoutes";
-import PropertyListPage from "./pages/PropertyListPage";
+//import PropertyListPage from "./pages/PropertyListPage";
 
 function AppContent() {
   const location = useLocation();
@@ -154,7 +154,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <AppContent />
-      <PropertyListPage />
+      
     </Router>
   );
 }
