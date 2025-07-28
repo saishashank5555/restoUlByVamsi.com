@@ -1,133 +1,128 @@
 import React, { useState } from "react";
-import BookButton from "../../components/BookButton";
-import BookingModal from "../../components/BookingModal";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../Sections/Home/Footer.jsx";
+
+const sections = [
+  {
+    key: "standard",
+    title: "Standard Guest Houses",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      name: `Standard Guest House ${i + 1}`,
+      location: "Delhi",
+      price: 1200 + i * 80,
+      rating: 3 + (i % 2),
+      imgSeed: 1300 + i,
+    })),
+  },
+  {
+    key: "luxury",
+    title: "Luxury Guest Houses",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 13,
+      name: `Luxury Guest House ${i + 1}`,
+      location: "Mumbai",
+      price: 2500 + i * 120,
+      rating: 4 + (i % 2),
+      imgSeed: 1400 + i,
+    })),
+  },
+];
 
 const GuestHouses = () => {
   const [showAll, setShowAll] = useState({
-    family: false,
-    budget: false,
+    standard: false,
     luxury: false,
-    hill: false,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-
-  const sections = [
-    {
-      key: "family",
-      title: "Family Guest Houses",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 1,
-        name: `Family Haven ${i + 1}`,
-        location: "Shimla",
-        price: 1800 + i * 10,
-        rating: 4 + (i % 2),
-        imgSeed: 100 + i,
-      })),
-    },
-    {
-      key: "budget",
-      title: "Budget Guest Houses",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 13,
-        name: `Budget Nest ${i + 1}`,
-        location: "Delhi",
-        price: 950 + i * 5,
-        rating: 3 + (i % 2),
-        imgSeed: 200 + i,
-      })),
-    },
-    {
-      key: "luxury",
-      title: "Luxury Guest Houses",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 25,
-        name: `Luxury Stay ${i + 1}`,
-        location: "Mumbai",
-        price: 3000 + i * 50,
-        rating: 5,
-        imgSeed: 300 + i,
-      })),
-    },
-    {
-      key: "hill",
-      title: "Hill View Guest Houses",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 37,
-        name: `Hill View Retreat ${i + 1}`,
-        location: "Manali",
-        price: 2000 + i * 20,
-        rating: 4 + (i % 2),
-        imgSeed: 400 + i,
-      })),
-    },
-  ];
+  const navigate = useNavigate();
 
   return (
     <>
       <style>
         {`
-          .guest-card {
+          .apt-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
           }
-          .guest-card:hover {
+          .apt-card:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
           }
-          .guest-image {
+          .apt-image {
             transition: transform 0.4s ease;
           }
-          .guest-card:hover .guest-image {
+          .apt-card:hover .apt-image {
             transform: scale(1.1);
-          }
-          .book-btn {
-            transition: background-color 0.3s ease, transform 0.2s ease;
-          }
-          .guest-card:hover .book-btn {
-            background-color: #0056b3;
-            transform: scale(1.05);
           }
         `}
       </style>
-
       <div style={styles.container}>
+        <h1 style={styles.pageTitle}>Guest Houses</h1>
         {sections.map((sec) => {
           const displayed = showAll[sec.key] ? sec.data : sec.data.slice(0, 8);
           return (
             <div key={sec.key} style={{ marginBottom: "3rem" }}>
               <h2 style={styles.heading}>{sec.title}</h2>
               <div style={styles.grid}>
-                {displayed.map((house) => (
-                  <div key={house.id} style={styles.card} className="guest-card">
+                {displayed.map((apt) => (
+                  <div key={apt.id} style={styles.card} className="apt-card">
                     <div style={styles.imageWrapper}>
                       <img
-                        src={`https://picsum.photos/400/300?random=${house.imgSeed}`}
-                        alt={house.name}
+                        src={`https://picsum.photos/400/300?random=${apt.imgSeed}`}
+                        alt={apt.name}
                         style={styles.image}
-                        className="guest-image"
+                        className="apt-image"
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/400x180?text=Guest+House")
+                          (e.target.src =
+                            "https://via.placeholder.com/400x300?text=Guest+House")
                         }
                       />
                     </div>
-                    <h3 style={styles.name}>{house.name}</h3>
-                    <p style={styles.location}>{house.location}</p>
-                    <p style={styles.price}>₹{house.price} / stay</p>
-                    <div style={styles.stars}>
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} style={{ color: i < house.rating ? "#f5a623" : "#ccc" }}>
-                          ★
-                        </span>
-                      ))}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "0.5rem" }}>
+                      <h3 style={{ ...styles.name, textAlign: "center", margin: 0 }}>{apt.name}</h3>
+                      <p style={{ ...styles.location, textAlign: "center", margin: 0 }}>{apt.location}</p>
+                      <div style={{ ...styles.stars, textAlign: "center", margin: "0.3rem 0" }}>
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              color: i < apt.rating ? "#f5a623" : "#ccc",
+                              fontSize: "1.1rem"
+                            }}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <p style={{ ...styles.price, textAlign: "center", margin: 0 }}>₹{apt.price} / stay</p>
                     </div>
-                    <BookButton
-                      house={house}
-                      onClick={() => {
-                        setSelectedProperty(house);
-                        setModalOpen(true);
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        marginTop: "10px",
                       }}
-                    />
+                      onClick={() =>
+                        navigate(`/book/${apt.id}`, {
+                          state: {
+                            hotel: {
+                              ...apt,
+                              images: [
+                                `https://picsum.photos/400/300?random=${apt.imgSeed}`,
+                                `https://picsum.photos/400/300?random=${apt.imgSeed + 1}`,
+                                `https://picsum.photos/400/300?random=${apt.imgSeed + 2}`,
+                              ],
+                            },
+                          },
+                        })
+                      }
+                    >
+                      See Availability
+                    </button>
                   </div>
                 ))}
               </div>
@@ -136,7 +131,10 @@ const GuestHouses = () => {
                   <button
                     style={styles.toggleButton}
                     onClick={() =>
-                      setShowAll((prev) => ({ ...prev, [sec.key]: !prev[sec.key] }))
+                      setShowAll((prev) => ({
+                        ...prev,
+                        [sec.key]: !prev[sec.key],
+                      }))
                     }
                   >
                     {showAll[sec.key] ? "Show Less" : "Explore More"}
@@ -146,12 +144,6 @@ const GuestHouses = () => {
             </div>
           );
         })}
-
-        <BookingModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          property={selectedProperty}
-        />
         <Footer />
       </div>
     </>
@@ -164,6 +156,13 @@ const styles = {
     padding: "2rem",
     margin: "0 auto",
     fontFamily: "Arial, sans-serif",
+  },
+  pageTitle: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    textAlign: "center",
+    marginBottom: "2rem",
+    color: "#1e293b",
   },
   heading: {
     fontSize: "1.5rem",
@@ -180,58 +179,54 @@ const styles = {
     borderRadius: "8px",
     backgroundColor: "#fff",
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    padding: "15px",
+    overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    cursor: "pointer",
+    transition: "transform 0.25s, box-shadow 0.25s",
   },
   imageWrapper: {
+    position: "relative",
+    width: "100%",
+    paddingTop: "75%",
     overflow: "hidden",
-    borderRadius: "6px",
-    marginBottom: "10px",
   },
   image: {
+    position: "absolute",
+    top: 0,
+    left: 0,
     width: "100%",
-    height: "160px",
+    height: "100%",
     objectFit: "cover",
-    display: "block",
+    transition: "transform 0.4s",
   },
   name: {
     fontSize: "1.1rem",
-    fontWeight: "bold",
-    margin: "5px 0",
+    fontWeight: 600,
+    margin: "0.5rem 0",
+    color: "#1e293b",
   },
   location: {
     fontSize: "0.9rem",
-    color: "#666",
+    color: "#64748b",
+    marginBottom: "0.5rem",
   },
   price: {
     fontSize: "1rem",
-    fontWeight: "bold",
-    margin: "8px 0",
-    color: "#2c3e50",
+    fontWeight: 500,
+    color: "#2563eb",
+    marginBottom: "1rem",
   },
   stars: {
-    fontSize: "1rem",
-    marginBottom: "10px",
-  },
-  bookNow: {
-    marginTop: "auto",
-    padding: "8px 16px",
-    backgroundColor: "#007bff",
-    border: "none",
-    color: "#fff",
-    borderRadius: "4px",
-    cursor: "pointer",
-    alignSelf: "flex-start",
+    marginBottom: "0.5rem",
   },
   toggleButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
+    backgroundColor: "transparent",
     border: "none",
-    color: "#fff",
-    borderRadius: "5px",
+    color: "#007bff",
     cursor: "pointer",
+    fontSize: "0.9rem",
+    padding: 0,
+    textDecoration: "underline",
   },
 };
 

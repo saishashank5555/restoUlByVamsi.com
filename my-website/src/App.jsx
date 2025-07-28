@@ -60,6 +60,7 @@ import OwnerLayout from "./components/owner/OwnerLayout";
 import contactUs from './pages/Footor/contactus.jsx';
 import AddPropertyRoutes from "./routes/AddPropertyRoutes";
 //import PropertyListPage from "./pages/PropertyListPage";
+import BookingPage from "./pages/Ourservices/BookingPage";
 
 function AppContent() {
   const location = useLocation();
@@ -143,6 +144,8 @@ function AppContent() {
           />
 
           <Route path="/owner/add-property/*" element={<AddPropertyRoutes />} />
+          <Route path="/book/:id" element={<BookingPage />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </div>
     </>

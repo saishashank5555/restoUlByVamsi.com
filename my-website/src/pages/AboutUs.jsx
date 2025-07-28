@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 const AboutUs = () => {
   const styles = {
@@ -124,7 +125,7 @@ const AboutUs = () => {
       </section>
 
       <section style={styles.ctaSection}>
-        <a style={styles.ctaButton} href="/contact">📩 Contact Us</a>
+        <Link style={styles.ctaButton} to="/contact">📩 Contact Us</Link>
         <a style={styles.ctaButton} href="/careers">🚀 Join Our Team</a>
       </section>
     </div>

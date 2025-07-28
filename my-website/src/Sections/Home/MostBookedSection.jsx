@@ -1,40 +1,19 @@
 import React, { useState } from "react";
-import BookButton from "../../components/BookButton";
-import BookingModal from "../../components/BookingModal";
+import { useNavigate } from "react-router-dom";
 import './homeSection.css'; // Using same styles as HyderabadHotelsSection
 
-const mostBookedHotels = [
+const sections = [
   {
-    name: "The Leela Palace New Delhi",
-    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=600&q=80",
-    rating: 5,
-    reviews: 712,
-    location: "Chanakyapuri, New Delhi",
-    price: 25999,
-  },
-  {
-    name: "The Oberoi Udaivilas",
-    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80",
-    rating: 5,
-    reviews: 634,
-    location: "Udaipur, Rajasthan",
-    price: 29999,
-  },
-  {
-    name: "JW Marriott Mumbai Sahar",
-    image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=600&q=80",
-    rating: 4,
-    reviews: 488,
-    location: "Andheri East, Mumbai",
-    price: 17999,
-  },
-  {
-    name: "The Ritz-Carlton Bangalore",
-    image: "https://images.unsplash.com/photo-1600585154032-0c8b1a9ff99d?auto=format&fit=crop&w=600&q=80",
-    rating: 5,
-    reviews: 523,
-    location: "Residency Road, Bangalore",
-    price: 21999,
+    key: "mostbooked",
+    title: "Most Booked Properties",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      name: `Popular Stay ${i + 1}`,
+      location: ["Hyderabad", "Bangalore", "Mumbai", "Delhi"][i % 4],
+      price: 2500 + i * 200,
+      rating: 4 + (i % 2),
+      imgSeed: 3000 + i,
+    })),
   },
 ];
 
@@ -49,44 +28,147 @@ const StarRating = ({ rating }) => {
 };
 
 const MostBookedHotels = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showAll, setShowAll] = useState({ mostbooked: false });
+  const navigate = useNavigate();
 
   return (
     <section className="popular-destinations-section">
       <h2 className="destination-heading">Most Booked Hotels</h2>
       <div className="destinations-list">
-        {mostBookedHotels.map((hotel, index) => (
-          <div className="destination-card" key={index}>
-            <img
-              src={hotel.image}
-              alt={hotel.name}
-              className="destination-img"
-              onError={(e) =>
-                (e.target.src =
-                  'https://placehold.co/600x400?text=Image+Not+Available')
-              }
-            />
-            <div className="destination-info">
-              <div className="destination-name">{hotel.name}</div>
-              <div className="destination-location">{hotel.location}</div>
-              <StarRating rating={hotel.rating} />
-              <div className="destination-reviews">{hotel.reviews} reviews</div>
-              <div className="destination-price">
-                <span className="blue-price">
-                  ₹{hotel.price.toLocaleString()} / stay
-                </span>
+        {sections.map((sec) => {
+          const displayed = showAll[sec.key] ? sec.data : sec.data.slice(0, 8);
+          return (
+            <div key={sec.key} style={{ marginBottom: "3rem" }}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                gap: "20px",
+              }}>
+                {displayed.map((hotel) => (
+                  <div key={hotel.id} style={{
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    backgroundColor: "#fff",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.25s, box-shadow 0.25s",
+                  }} className="apt-card">
+                    <div style={{
+                      position: "relative",
+                      width: "100%",
+                      paddingTop: "75%",
+                      overflow: "hidden",
+                    }}>
+                      <img
+                        src={`https://picsum.photos/400/300?random=${hotel.imgSeed}`}
+                        alt={hotel.name}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          transition: "transform 0.4s",
+                        }}
+                        className="apt-image"
+                        onError={(e) =>
+                          (e.target.src =
+                            "https://via.placeholder.com/400x300?text=Hotel")
+                        }
+                      />
+                    </div>
+                    <h3 style={{
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                      margin: "0.5rem 0",
+                      color: "#1e293b",
+                    }}>{hotel.name}</h3>
+                    <p style={{
+                      fontSize: "0.9rem",
+                      color: "#64748b",
+                      marginBottom: "0.5rem",
+                    }}>{hotel.location}</p>
+                    <p style={{
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      color: "#2563eb",
+                      marginBottom: "1rem",
+                    }}>
+                      ₹{hotel.price} / stay
+                    </p>
+                    <div style={{ marginBottom: "0.5rem" }}>
+                      {[...Array(5)].map((_, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            color: i < hotel.rating ? "#f5a623" : "#ccc",
+                          }}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        marginTop: "10px",
+                      }}
+                      onClick={() =>
+                        navigate(`/book/${hotel.id}`, {
+                          state: {
+                            hotel: {
+                              ...hotel,
+                              images: [
+                                `https://picsum.photos/400/300?random=${hotel.imgSeed}`,
+                                `https://picsum.photos/400/300?random=${hotel.imgSeed + 1}`,
+                                `https://picsum.photos/400/300?random=${hotel.imgSeed + 2}`,
+                              ],
+                            },
+                          },
+                        })
+                      }
+                    >
+                      See Availability
+                    </button>
+                  </div>
+                ))}
               </div>
-              <BookButton onClick={() => { setSelectedProperty(hotel); setModalOpen(true); }} />
+              {sec.data.length > 8 && (
+                <div style={{ textAlign: "right", marginTop: "20px" }}>
+                  <button
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "#007bff",
+                      cursor: "pointer",
+                      fontSize: "0.9rem",
+                      padding: 0,
+                      textDecoration: "underline",
+                    }}
+                    onClick={() =>
+                      setShowAll((prev) => ({
+                        ...prev,
+                        [sec.key]: !prev[sec.key],
+                      }))
+                    }
+                  >
+                    {showAll[sec.key] ? "Show Less" : "Explore More"}
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <BookingModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        property={selectedProperty}
-      />
     </section>
   );
 };

@@ -1,97 +1,88 @@
 import React, { useState } from "react";
-import BookButton from "../../components/BookButton";
-import BookingModal from "../../components/BookingModal";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../Sections/Home/Footer.jsx";
+
+const sections = [
+  {
+    key: "wedding",
+    title: "Wedding Banquet Halls",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      name: `Wedding Hall ${i + 1}`,
+      location: "Hyderabad",
+      price: 25000 + i * 2000,
+      rating: 4 + (i % 2),
+      imgSeed: 1500 + i,
+    })),
+  },
+  {
+    key: "corporate",
+    title: "Corporate Banquet Halls",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 13,
+      name: `Corporate Hall ${i + 1}`,
+      location: "Bangalore",
+      price: 18000 + i * 1500,
+      rating: 4 + (i % 2),
+      imgSeed: 1600 + i,
+    })),
+  },
+  {
+    key: "party",
+    title: "Party Banquet Halls",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 25,
+      name: `Party Hall ${i + 1}`,
+      location: "Chennai",
+      price: 12000 + i * 1000,
+      rating: 3 + (i % 2),
+      imgSeed: 1700 + i,
+    })),
+  },
+  {
+    key: "luxury",
+    title: "Luxury Banquet Halls",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 37,
+      name: `Luxury Hall ${i + 1}`,
+      location: "Mumbai",
+      price: 40000 + i * 3000,
+      rating: 5,
+      imgSeed: 1800 + i,
+    })),
+  },
+];
 
 const BanquetHalls = () => {
   const [showAll, setShowAll] = useState({
     wedding: false,
     corporate: false,
-    birthday: false,
+    party: false,
     luxury: false,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-
-  const sections = [
-    {
-      key: "wedding",
-      title: "Wedding Banquet Halls",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 1,
-        name: `Royal Wedding Hall ${i + 1}`,
-        location: "Jaipur",
-        price: 12000 + i * 200,
-        rating: 5 - (i % 2),
-        imgSeed: 500 + i,
-      })),
-    },
-    {
-      key: "corporate",
-      title: "Corporate Event Halls",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 13,
-        name: `Executive Hall ${i + 1}`,
-        location: "Bengaluru",
-        price: 8000 + i * 150,
-        rating: 4 + (i % 2),
-        imgSeed: 600 + i,
-      })),
-    },
-    {
-      key: "birthday",
-      title: "Birthday Party Halls",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 25,
-        name: `Birthday Bash Hall ${i + 1}`,
-        location: "Hyderabad",
-        price: 5000 + i * 100,
-        rating: 3 + (i % 2),
-        imgSeed: 700 + i,
-      })),
-    },
-    {
-      key: "luxury",
-      title: "Luxury Banquet Halls",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 37,
-        name: `Luxury Banquet ${i + 1}`,
-        location: "Delhi",
-        price: 20000 + i * 500,
-        rating: 5,
-        imgSeed: 800 + i,
-      })),
-    },
-  ];
+  const navigate = useNavigate();
 
   return (
     <>
       <style>
         {`
-          .banquet-card {
+          .apt-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
           }
-          .banquet-card:hover {
+          .apt-card:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
           }
-          .banquet-image {
+          .apt-image {
             transition: transform 0.4s ease;
           }
-          .banquet-card:hover .banquet-image {
+          .apt-card:hover .apt-image {
             transform: scale(1.1);
-          }
-          .book-btn {
-            transition: background-color 0.3s ease, transform 0.2s ease;
-          }
-          .banquet-card:hover .book-btn {
-            background-color: #0056b3;
-            transform: scale(1.05);
           }
         `}
       </style>
-
       <div style={styles.container}>
+        <h1 style={styles.pageTitle}>Banquet Halls</h1>
         {sections.map((sec) => {
           const displayed = showAll[sec.key] ? sec.data : sec.data.slice(0, 8);
           return (
@@ -99,29 +90,102 @@ const BanquetHalls = () => {
               <h2 style={styles.heading}>{sec.title}</h2>
               <div style={styles.grid}>
                 {displayed.map((hall) => (
-                  <div key={hall.id} style={styles.card} className="banquet-card">
+                  <div key={hall.id} style={styles.card} className="apt-card">
                     <div style={styles.imageWrapper}>
                       <img
                         src={`https://picsum.photos/400/300?random=${hall.imgSeed}`}
                         alt={hall.name}
                         style={styles.image}
-                        className="banquet-image"
+                        className="apt-image"
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/400x180?text=Banquet+Hall")
+                          (e.target.src =
+                            "https://via.placeholder.com/400x300?text=Banquet+Hall")
                         }
                       />
                     </div>
-                    <h3 style={styles.name}>{hall.name}</h3>
-                    <p style={styles.location}>{hall.location}</p>
-                    <p style={styles.price}>₹{hall.price} / stay</p>
-                    <div style={styles.stars}>
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} style={{ color: i < hall.rating ? "#f5a623" : "#ccc" }}>
-                          ★
-                        </span>
-                      ))}
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <h3
+                        style={{
+                          ...styles.name,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        {hall.name}
+                      </h3>
+                      <p
+                        style={{
+                          ...styles.location,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        {hall.location}
+                      </p>
+                      <div
+                        style={{
+                          ...styles.stars,
+                          textAlign: "center",
+                          margin: "0.3rem 0",
+                        }}
+                      >
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              color: i < hall.rating ? "#f5a623" : "#ccc",
+                              fontSize: "1.1rem",
+                            }}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <p
+                        style={{
+                          ...styles.price,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        ₹{hall.price} / stay
+                      </p>
                     </div>
-                    <BookButton hall={hall} onClick={() => { setSelectedProperty(hall); setModalOpen(true); }} />
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        marginTop: "10px",
+                      }}
+                      onClick={() =>
+                        navigate(`/book/${hall.id}`, {
+                          state: {
+                            hotel: {
+                              ...hall,
+                              images: [
+                                `https://picsum.photos/400/300?random=${hall.imgSeed}`,
+                                `https://picsum.photos/400/300?random=${hall.imgSeed + 1}`,
+                                `https://picsum.photos/400/300?random=${hall.imgSeed + 2}`,
+                              ],
+                            },
+                          },
+                        })
+                      }
+                    >
+                      See Availability
+                    </button>
                   </div>
                 ))}
               </div>
@@ -130,7 +194,10 @@ const BanquetHalls = () => {
                   <button
                     style={styles.toggleButton}
                     onClick={() =>
-                      setShowAll((prev) => ({ ...prev, [sec.key]: !prev[sec.key] }))
+                      setShowAll((prev) => ({
+                        ...prev,
+                        [sec.key]: !prev[sec.key],
+                      }))
                     }
                   >
                     {showAll[sec.key] ? "Show Less" : "Explore More"}
@@ -140,12 +207,6 @@ const BanquetHalls = () => {
             </div>
           );
         })}
-
-        <BookingModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          property={selectedProperty}
-        />
         <Footer />
       </div>
     </>
@@ -158,6 +219,13 @@ const styles = {
     padding: "2rem",
     margin: "0 auto",
     fontFamily: "Arial, sans-serif",
+  },
+  pageTitle: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    textAlign: "center",
+    marginBottom: "2rem",
+    color: "#1e293b",
   },
   heading: {
     fontSize: "1.5rem",
@@ -174,48 +242,54 @@ const styles = {
     borderRadius: "8px",
     backgroundColor: "#fff",
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    padding: "15px",
+    overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    cursor: "pointer",
+    transition: "transform 0.25s, box-shadow 0.25s",
   },
   imageWrapper: {
+    position: "relative",
+    width: "100%",
+    paddingTop: "75%",
     overflow: "hidden",
-    borderRadius: "6px",
-    marginBottom: "10px",
   },
   image: {
+    position: "absolute",
+    top: 0,
+    left: 0,
     width: "100%",
-    height: "160px",
+    height: "100%",
     objectFit: "cover",
-    display: "block",
+    transition: "transform 0.4s",
   },
   name: {
     fontSize: "1.1rem",
-    fontWeight: "bold",
-    margin: "5px 0",
+    fontWeight: 600,
+    margin: "0.5rem 0",
+    color: "#1e293b",
   },
   location: {
     fontSize: "0.9rem",
-    color: "#666",
+    color: "#64748b",
+    marginBottom: "0.5rem",
   },
   price: {
     fontSize: "1rem",
-    fontWeight: "bold",
-    margin: "8px 0",
-    color: "#2c3e50",
+    fontWeight: 500,
+    color: "#2563eb",
+    marginBottom: "1rem",
   },
   stars: {
-    fontSize: "1rem",
-    marginBottom: "10px",
+    marginBottom: "0.5rem",
   },
   toggleButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
+    backgroundColor: "transparent",
     border: "none",
-    color: "#fff",
-    borderRadius: "5px",
+    color: "#007bff",
     cursor: "pointer",
+    fontSize: "0.9rem",
+    padding: 0,
+    textDecoration: "underline",
   },
 };
 

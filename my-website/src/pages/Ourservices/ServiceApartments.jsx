@@ -1,7 +1,58 @@
 import React, { useState } from "react";
-import BookButton from "../../components/BookButton";
-import BookingModal from "../../components/BookingModal";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../Sections/Home/Footer.jsx";
+
+const sections = [
+  {
+    
+    key: "business",
+    title: "Business Apartments",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      name: `Metro Stay ${i + 1}`,
+      location: "Gurgaon",
+      price: 2500 + i * 150,
+      rating: 4 + (i % 2),
+      imgSeed: 900 + i,
+    })),
+  },
+  {
+    key: "family",
+    title: "Family Friendly Apartments",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 13,
+      name: `Family Suites ${i + 1}`,
+      location: "Pune",
+      price: 2200 + i * 100,
+      rating: 4 + (i % 2),
+      imgSeed: 1000 + i,
+    })),
+  },
+  {
+    key: "budget",
+    title: "Budget Service Apartments",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 25,
+      name: `Budget Nest ${i + 1}`,
+      location: "Ahmedabad",
+      price: 1800 + i * 80,
+      rating: 3 + (i % 2),
+      imgSeed: 1100 + i,
+    })),
+  },
+  {
+    key: "premium",
+    title: "Premium Apartments",
+    data: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 37,
+      name: `Elite Suites ${i + 1}`,
+      location: "Chennai",
+      price: 3500 + i * 200,
+      rating: 5,
+      imgSeed: 1200 + i,
+    })),
+  },
+];
 
 const ServiceApartments = () => {
   const [showAll, setShowAll] = useState({
@@ -10,59 +61,7 @@ const ServiceApartments = () => {
     budget: false,
     premium: false,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-
-  const sections = [
-    {
-      key: "business",
-      title: "Business Apartments",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 1,
-        name: `Metro Stay ${i + 1}`,
-        location: "Gurgaon",
-        price: 2500 + i * 150,
-        rating: 4 + (i % 2),
-        imgSeed: 900 + i,
-      })),
-    },
-    {
-      key: "family",
-      title: "Family Friendly Apartments",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 13,
-        name: `Family Suites ${i + 1}`,
-        location: "Pune",
-        price: 2200 + i * 100,
-        rating: 4 + (i % 2),
-        imgSeed: 1000 + i,
-      })),
-    },
-    {
-      key: "budget",
-      title: "Budget Service Apartments",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 25,
-        name: `Budget Nest ${i + 1}`,
-        location: "Ahmedabad",
-        price: 1800 + i * 80,
-        rating: 3 + (i % 2),
-        imgSeed: 1100 + i,
-      })),
-    },
-    {
-      key: "premium",
-      title: "Premium Apartments",
-      data: Array.from({ length: 12 }, (_, i) => ({
-        id: i + 37,
-        name: `Elite Suites ${i + 1}`,
-        location: "Chennai",
-        price: 3500 + i * 200,
-        rating: 5,
-        imgSeed: 1200 + i,
-      })),
-    },
-  ];
+  const navigate = useNavigate();
 
   return (
     <>
@@ -112,23 +111,89 @@ const ServiceApartments = () => {
                         }
                       />
                     </div>
-                    <h3 style={styles.name}>{apt.name}</h3>
-                    <p style={styles.location}>{apt.location}</p>
-                    <p style={styles.price}>₹{apt.price} / stay</p>
-                    <div style={styles.stars}>
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} style={{ color: i < apt.rating ? "#f5a623" : "#ccc" }}>
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                    <BookButton
-                      apartment={apt}
-                      onClick={() => {
-                        setSelectedProperty(apt);
-                        setModalOpen(true);
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginBottom: "0.5rem",
                       }}
-                    />
+                    >
+                      <h3
+                        style={{
+                          ...styles.name,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        {apt.name}
+                      </h3>
+                      <p
+                        style={{
+                          ...styles.location,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        {apt.location}
+                      </p>
+                      <div
+                        style={{
+                          ...styles.stars,
+                          textAlign: "center",
+                          margin: "0.3rem 0",
+                        }}
+                      >
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              color: i < apt.rating ? "#f5a623" : "#ccc",
+                              fontSize: "1.1rem",
+                            }}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <p
+                        style={{
+                          ...styles.price,
+                          textAlign: "center",
+                          margin: 0,
+                        }}
+                      >
+                        ₹{apt.price} / stay
+                      </p>
+                    </div>
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        marginTop: "10px",
+                      }}
+                      onClick={() =>
+                        navigate(`/book/${apt.id}`, {
+                          state: {
+                            hotel: {
+                              ...apt,
+                              images: [
+                                `https://picsum.photos/400/300?random=${apt.imgSeed}`,
+                                `https://picsum.photos/400/300?random=${apt.imgSeed + 1}`,
+                                `https://picsum.photos/400/300?random=${apt.imgSeed + 2}`,
+                              ],
+                            },
+                          },
+                        })
+                      }
+                    >
+                      See Availability
+                    </button>
                   </div>
                 ))}
               </div>
@@ -137,7 +202,10 @@ const ServiceApartments = () => {
                   <button
                     style={styles.toggleButton}
                     onClick={() =>
-                      setShowAll((prev) => ({ ...prev, [sec.key]: !prev[sec.key] }))
+                      setShowAll((prev) => ({
+                        ...prev,
+                        [sec.key]: !prev[sec.key],
+                      }))
                     }
                   >
                     {showAll[sec.key] ? "Show Less" : "Explore More"}
@@ -149,11 +217,6 @@ const ServiceApartments = () => {
         })}
         <Footer />
       </div>
-      <BookingModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        property={selectedProperty}
-      />
     </>
   );
 };
@@ -180,48 +243,54 @@ const styles = {
     borderRadius: "8px",
     backgroundColor: "#fff",
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    padding: "15px",
+    overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    cursor: "pointer",
+    transition: "transform 0.25s, box-shadow 0.25s",
   },
   imageWrapper: {
+    position: "relative",
+    width: "100%",
+    paddingTop: "75%",
     overflow: "hidden",
-    borderRadius: "6px",
-    marginBottom: "10px",
   },
   image: {
+    position: "absolute",
+    top: 0,
+    left: 0,
     width: "100%",
-    height: "160px",
+    height: "100%",
     objectFit: "cover",
-    display: "block",
+    transition: "transform 0.4s",
   },
   name: {
     fontSize: "1.1rem",
-    fontWeight: "bold",
-    margin: "5px 0",
+    fontWeight: 600,
+    margin: "0.5rem 0",
+    color: "#1e293b",
   },
   location: {
     fontSize: "0.9rem",
-    color: "#666",
+    color: "#64748b",
+    marginBottom: "0.5rem",
   },
   price: {
     fontSize: "1rem",
-    fontWeight: "bold",
-    margin: "8px 0",
-    color: "#2c3e50",
+    fontWeight: 500,
+    color: "#2563eb",
+    marginBottom: "1rem",
   },
   stars: {
-    fontSize: "1rem",
-    marginBottom: "10px",
+    marginBottom: "0.5rem",
   },
   toggleButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
+    backgroundColor: "transparent",
     border: "none",
-    color: "#fff",
-    borderRadius: "5px",
+    color: "#007bff",
     cursor: "pointer",
+    fontSize: "0.9rem",
+    padding: 0,
+    textDecoration: "underline",
   },
 };
 
